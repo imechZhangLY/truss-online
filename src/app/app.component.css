@@ -1,0 +1,16 @@
+.title{
+    font-size: 25px;
+    color:red;
+    background-color:rgb(152, 198, 153);
+    height: 40px;
+    width: 100%;
+}
+.title .icon{
+    display: inline-block;
+    height: 30px;
+    width: 60px;
+    margin-left: 5px;
+    margin-right: 10px;
+    background-image: url(assets/truss.png);
+    background-size: 60px;
+}

@@ -1,0 +1,14 @@
+<div id="paint" class="paint" [style.height.px]="height">
+  <svg [attr.width]="width" [attr.height]="height">
+    <defs>
+      <marker id="Triangle" viewBox="0 0 10 10" refX="0" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z"  stroke="rgb(200,200,200)" fill="rgb(200,200,200)"/>
+      </marker>
+    </defs>
+    <line [attr.x1]="coordinate.pointO.x" [attr.y1]="coordinate.pointO.y" [attr.x2]="coordinate.pointX.x" [attr.y2]="coordinate.pointX.y" stroke="rgb(200,200,200)" stroke-width="3" marker-end="url(#Triangle)"/>
+    <line [attr.x1]="coordinate.pointO.x" [attr.y1]="coordinate.pointO.y" [attr.x2]="coordinate.pointY.x" [attr.y2]="coordinate.pointY.y" stroke="rgb(200,200,200)" stroke-width="3" marker-end="url(#Triangle)"/>
+    <text [attr.x]="coordinate.textXLocation.x" [attr.y]="coordinate.textXLocation.y" [attr.fill]="coordinate.fontColor" [attr.font-size]="coordinate.fontSize">X</text>
+    <text [attr.x]="coordinate.textYLocation.x" [attr.y]="coordinate.textYLocation.y" [attr.fill]="coordinate.fontColor" [attr.font-size]="coordinate.fontSize">Y</text>
+  </svg>
+<div>

@@ -1,0 +1,6 @@
+<div class="menue">
+    Menu:
+    <div class="menue-button" [class.select]="button.selected" *ngFor="let button of menue" (mouseover)="button.hover()" (mouseleave)="button.out()" (click)="button.click()">
+        <img class="button" [title]="button.title" [src]="button.src">
+    </div>
+</div>

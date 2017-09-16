@@ -1,0 +1,23 @@
+.menue{
+    display: flex;
+    border-bottom: 2px solid rgb(185,185,185);
+    border-top: 2px solid rgb(155,155,155);
+    font-size: 20px;
+    height: 30px;
+    padding:10px 0 2px 0;
+    margin: 0px;
+}
+.menue .menue-button{
+    margin-left: 20px;
+    height: 25px;
+
+}
+.select{
+    margin-left: 20px;
+    height: 25px;
+    border: 1px solid blue;
+    background-color: rgb(180, 191, 251)
+}
+.button{
+    height: 25px;
+}
