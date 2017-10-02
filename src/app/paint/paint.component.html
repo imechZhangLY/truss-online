@@ -10,7 +10,8 @@
     <line [attr.x1]="coordinate.x1" [attr.y1]="coordinate.y1" [attr.x2]="coordinate.x1" [attr.y2]="coordinate.y2" [attr.stroke]="coordinate.__option__.axis.color" [attr.stroke-width]="coordinate.__option__.axis.width" marker-end="url(#Triangle)"/>
     <text [attr.x]="coordinate.xTitlePositionX" [attr.y]="coordinate.xTitlePositionY" [attr.fill]="coordinate.__option__.font.fontColor" [attr.font-size]="coordinate.__option__.font.fontSize">{{coordinate.__option__.title.xTitle}}</text>
     <text [attr.x]="coordinate.yTitlePositionX" [attr.y]="coordinate.yTitlePositionY" [attr.fill]="coordinate.__option__.font.fontColor" [attr.font-size]="coordinate.__option__.font.fontSize">{{coordinate.__option__.title.yTitle}}</text>
+    <circle *ngFor="let point of graph.points" [attr.cx]="point ? point.x : -100" [attr.cy]="point ? point.y : -100" [attr.r]="4" [attr.stroke]="graphOption.color" [attr.fill]="graphOption.color"></circle>
     <line *ngFor="let line of graph.lines" [attr.x1]="line ? line.pointS.x : -100" [attr.y1]="line ? line.pointS.y : -100" [attr.x2]="line ? line.pointE.x : -100" [attr.y2]="line ? line.pointE.y : -100" [attr.stroke]="graphOption.color" [attr.stroke-width]="graphOption.width"></line>
-    <line [attr.x1]='tempLine.pointS.x' [attr.y1]="tempLine.pointS.y" [attr.x2]="tempLine.pointE.x" [attr.y2]="tempLine.pointE.y" [attr.stroke]="graphOption.color" [attr.stroke-width]="graphOption.width"></line>
+    <line *ngIf="menue.children[0].clicked" [attr.x1]='tempLine.pointS.x' [attr.y1]="tempLine.pointS.y" [attr.x2]="tempLine.pointE.x" [attr.y2]="tempLine.pointE.y" [attr.stroke]="graphOption.color" [attr.stroke-width]="graphOption.width"></line>
   </svg>
 <div>

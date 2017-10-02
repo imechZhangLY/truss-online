@@ -14,9 +14,11 @@ export class PaintComponent implements OnInit {
   width: number;
   trussTree: LINE[];
   tempLine: LINE;
-  currentPointerPoint: POINT;
-  lastPointerPoint: POINT;
+  currentScreenPoint: POINT;
+  lastScreenPoint: POINT;
   currentPoint: POINT;
+  currentIndex: number;
+  lastIndex: number;
   paintMap;
   coordinate;
   graph;
@@ -30,7 +32,7 @@ export class PaintComponent implements OnInit {
     this.menue = trussService.getMenue();
     this.graphOption = trussService.getGraphOption();
     this.tempLine = new LINE(new POINT(-100,-100),new POINT(-100,-100));
-    this.currentPointerPoint = new POINT(0,0);
+    this.currentScreenPoint = new POINT(0,0);
    };
 
   // @HostListener('mousemove', ['$event'])
@@ -68,34 +70,49 @@ export class PaintComponent implements OnInit {
       createLine: {
         mouseMove(event: MouseEvent) {
           let currentPointerPoint = new POINT(event.clientX,event.clientY);
-          if(self.lastPointerPoint){
-
+          if(self.lastScreenPoint){
+            let currentScreenPoint = self.graph.pointerPointToScreenPoint(currentPointerPoint);
             //如果这次的点和上次的点的距离小于临界值，则不执行任何操作
-            if(POINT.distanceBetweenTwoPoints(currentPointerPoint,self.currentPointerPoint) < self.graphOption.sensitivity){
+            if(POINT.distanceBetweenTwoPoints(currentScreenPoint, self.currentScreenPoint) < self.graphOption.sensitivity){
               return undefined;
             }
-
-            self.currentPointerPoint = currentPointerPoint;
-            let currentScreenPoint = self.graph.pointerPointToScreenPoint(currentPointerPoint);
-            let lastScreenPoint = self.graph.pointerPointToScreenPoint(self.lastPointerPoint)
-            self.tempLine.pointS = lastScreenPoint;
+            self.currentIndex = undefined;
+            let index = self.graph.captureEndPoint(currentScreenPoint);
+            console.log(index);
+            if(index !== undefined){
+              self.currentIndex = index;
+              console.log(index);
+              currentScreenPoint.x = self.graph.points[index].x;
+              currentScreenPoint.y = self.graph.points[index].y;           
+            }
+            let currentPoint = self.graph.screenPointToModelPoint(currentScreenPoint);
+            self.currentPoint.x = currentPoint.x;
+            self.currentPoint.y = currentPoint.y;
+            self.currentScreenPoint = currentScreenPoint;
+            self.tempLine.pointS = self.lastScreenPoint;
             // self.tempLine.pointS.y = lastScreenPoint.y;
             self.tempLine.pointE = currentScreenPoint;
             // self.tempLine.pointE.y = currentScreenPoint.y;
           }
-          let currentPoint = self.graph.screenPointToModelPoint(currentPointerPoint);
-          self.currentPoint.x = currentPoint.x;
-          self.currentPoint.y = currentPoint.y;
         },
         click(event:MouseEvent) {
-          let currentPointerPoint:POINT = new POINT(event.clientX,event.clientY);
-          if(self.lastPointerPoint){
-            self.graph.lines = new LINE(self.lastPointerPoint,currentPointerPoint);
-            self.lastPointerPoint.x = currentPointerPoint.x;
-            self.lastPointerPoint.y = currentPointerPoint.y;
-            console.log(self.graph.__lines__)
+          let currentPointerPoint = new POINT(event.clientX,event.clientY);
+          let currentScreenPoint = self.graph.pointerPointToScreenPoint(currentPointerPoint);
+          let currentPoint = self.graph.screenPointToModelPoint(currentScreenPoint);
+          if(self.lastScreenPoint){
+            if(self.currentIndex){
+              self.graph.lines = [self.lastIndex, self.currentIndex];
+              self.lastIndex = self.currentIndex;
+            }else{
+              self.graph.points = currentPoint;
+              self.graph.lines = [self.lastIndex, self.graph.pointNumber];
+              self.lastIndex = self.graph.pointNumber;
+            };
+            self.lastScreenPoint = self.currentScreenPoint;
           }else{
-            self.lastPointerPoint = currentPointerPoint;
+            self.graph.points = currentPoint;
+            self.lastIndex = self.graph.pointNumber;
+            self.lastScreenPoint = currentScreenPoint;
           }
         }
       },
@@ -105,8 +122,6 @@ export class PaintComponent implements OnInit {
   oclick(event:MouseEvent) {
     if(this.menue.which){
       this.opetation(this)[this.menue.which].click(event);
-      console.log(event.clientX)
-      console.log(this.graph.lines)
     }
   };
 
@@ -114,7 +129,7 @@ export class PaintComponent implements OnInit {
     if(this.menue.which){
       this.opetation(this)[this.menue.which].mouseMove(event);
     }else{
-      this.lastPointerPoint = undefined;
+      this.lastScreenPoint = undefined;
       this.tempLine = new LINE(new POINT(-100,-100),new POINT(-100,-100));
     }
   };

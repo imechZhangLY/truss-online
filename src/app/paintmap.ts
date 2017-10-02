@@ -85,19 +85,21 @@ export const COORDINATE = {
 
 export const GRAPH = {
     paintMap: PAINTMAP,
-    __lines__: [],
+    __lines__: [], //二维数组，用于存放节点编号
+    __points__: [],
+    pointNumber: -1,
 
     //通过鼠标指针获得的点，转化为svg的坐标点
-    pointerPointToScreenPoint(point):POINT{
+    pointerPointToScreenPoint(point:POINT):POINT{
         let x = point.x - this.paintMap.left;
         let y = point.y - this.paintMap.top;
         return new POINT(x,y);
     },
 
-    //将鼠标获得点直接转化为模型的点
-    screenPointToModelPoint(point):POINT {
-        let x = point.x - this.paintMap.left;
-        let y = point.y - this.paintMap.top;
+    //将screen的点之间转换为model点
+    screenPointToModelPoint(point:POINT):POINT {
+        let x = point.x;
+        let y = point.y;
         let radio = this.paintMap.typicalLength / this.paintMap.paintMapWidth
         x = x * radio - 0.5 * this.paintMap.typicalLength;
         y = 0.5 * radio * this.paintMap.paintMapHeight - y  * radio;
@@ -106,8 +108,15 @@ export const GRAPH = {
         return new POINT(x,y);
     },
 
+    //将鼠标获得点直接转化为模型的点
+    pointerPointToModelPoint(point:POINT):POINT {
+        let screenPoint = this.pointerPointToScreenPoint(point);
+        let modelPoint = this.screenPointToModelPoint(screenPoint);
+        return modelPoint;
+    },
+
     //将模型的点转化为svg的点
-    modelPointToScreenPoint(point):POINT {
+    modelPointToScreenPoint(point:POINT):POINT {
         let radio = this.paintMap.paintMapWidth / this.paintMap.typicalLength
         let x = point.x * radio + 0.5 * this.paintMap.paintMapWidth;
         let y = -point.y  * radio + 0.5 * this.paintMap.paintMapHeight;
@@ -116,18 +125,53 @@ export const GRAPH = {
         return new POINT(x,y);
     },
 
+    //捕获坐标点，必须是screen点
+    capture(point1:POINT, point2:POINT) {
+        let dis = POINT.distanceBetweenTwoPoints(point1, point2);
+        console.log(dis)
+        if(dis < 0.01 * this.paintMap.paintMapWidth){
+            return true;
+        }else{
+            return false;
+        }
+    },
+
+    //捕获端点
+    captureEndPoint(point: POINT) {
+        let result = undefined;
+        this.points.some((element,index) => {
+            if(this.capture(element, point)){
+                result = index;
+                return true;
+            };
+        });
+        return result;
+    },
+
+    //将屏幕上指针的点转换为model的点，指针的点的坐标原点在body的左上角
+    set points(point:any) {
+        this.__points__.push(point);
+        this.pointNumber++;
+    },
+
+    //得到的是屏幕上的像素点
+    get points():any {
+        return this.__points__.map(element => {
+            return this.modelPointToScreenPoint(element);
+        });
+    },
+
     get lines():any {
         return this.__lines__.map(element => {
-            let point1 = this.modelPointToScreenPoint(element.pointS);
-            let point2 = this.modelPointToScreenPoint(element.pointE);
+            let point1 = this.modelPointToScreenPoint(this.__points__[element[0]]);
+            let point2 = this.modelPointToScreenPoint(this.__points__[element[1]]);
             return new LINE(point1,point2)
         });
     },
 
-    set lines(line1:any) {
-        let point1 = this.screenPointToModelPoint(line1.pointS);
-        let point2 = this.screenPointToModelPoint(line1.pointE);
-        this.__lines__.push(new LINE(point1,point2));
+    set lines(index) {
+        //index是一个array，包含两个数分别代表两个点在points中的索引
+        this.__lines__.push(index);
     }
 }
 
@@ -136,5 +180,5 @@ export const CURRENTPOINT:POINT = new POINT(0,0);
 export const GRAPHOPTION = {
     width: 3,
     color: 'black',
-    sensitivity: 5
+    sensitivity: 1
 }

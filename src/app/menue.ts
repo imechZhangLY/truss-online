@@ -4,7 +4,7 @@ export class BUTTON {
     title:string;
     src:string;
     selected:boolean; 
-    clicted:boolean;
+    clicked:boolean;
     parent;
     constructor(index:number,name:string,title:string, src:string,parent) {
         this.index = index;
@@ -12,32 +12,32 @@ export class BUTTON {
         this.title = title;
         this.src = src;
         this.selected = false;
-        this.clicted = false;
+        this.clicked = false;
         this.parent = parent;
     }
 
     hover(): void {
-        if(!this.clicted){
+        if(!this.clicked){
             this.selected = true 
         }
     }
 
     out(): void{
-        if(!this.clicted){
+        if(!this.clicked){
             this.selected = false;
         }
     }
 
     click(): void{
-        if(this.clicted){
-            this.clicted = false;
+        if(this.clicked){
+            this.clicked = false;
             this.parent.which = '';
         }else{
             this.parent.children.forEach((element,index) => {
                 this.parent.children[index].clicted = false;
                 this.parent.children[index].selected = false;
             });
-            this.clicted = true;
+            this.clicked = true;
             this.selected = true;
             this.parent.which = this.name;
         }
