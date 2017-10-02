@@ -1,14 +1,16 @@
-<div id="paint" class="paint" [style.height.px]="height">
-  <svg [attr.width]="width" [attr.height]="height">
+<div id="paint" class="paint">
+  <svg class="paintMap" (click)="oclick($event)" (mousemove)="omouseMove($event)">
     <defs>
       <marker id="Triangle" viewBox="0 0 10 10" refX="0" refY="5"
           markerWidth="6" markerHeight="6" orient="auto">
         <path d="M 0 0 L 10 5 L 0 10 z"  stroke="rgb(200,200,200)" fill="rgb(200,200,200)"/>
       </marker>
     </defs>
-    <line [attr.x1]="coordinate.pointO.x" [attr.y1]="coordinate.pointO.y" [attr.x2]="coordinate.pointX.x" [attr.y2]="coordinate.pointX.y" stroke="rgb(200,200,200)" stroke-width="3" marker-end="url(#Triangle)"/>
-    <line [attr.x1]="coordinate.pointO.x" [attr.y1]="coordinate.pointO.y" [attr.x2]="coordinate.pointY.x" [attr.y2]="coordinate.pointY.y" stroke="rgb(200,200,200)" stroke-width="3" marker-end="url(#Triangle)"/>
-    <text [attr.x]="coordinate.textXLocation.x" [attr.y]="coordinate.textXLocation.y" [attr.fill]="coordinate.fontColor" [attr.font-size]="coordinate.fontSize">X</text>
-    <text [attr.x]="coordinate.textYLocation.x" [attr.y]="coordinate.textYLocation.y" [attr.fill]="coordinate.fontColor" [attr.font-size]="coordinate.fontSize">Y</text>
+    <line [attr.x1]="coordinate.x1" [attr.y1]="coordinate.y1" [attr.x2]="coordinate.x2" [attr.y2]="coordinate.y1" [attr.stroke]="coordinate.__option__.axis.color" [attr.stroke-width]="coordinate.__option__.axis.width" marker-end="url(#Triangle)"/>
+    <line [attr.x1]="coordinate.x1" [attr.y1]="coordinate.y1" [attr.x2]="coordinate.x1" [attr.y2]="coordinate.y2" [attr.stroke]="coordinate.__option__.axis.color" [attr.stroke-width]="coordinate.__option__.axis.width" marker-end="url(#Triangle)"/>
+    <text [attr.x]="coordinate.xTitlePositionX" [attr.y]="coordinate.xTitlePositionY" [attr.fill]="coordinate.__option__.font.fontColor" [attr.font-size]="coordinate.__option__.font.fontSize">{{coordinate.__option__.title.xTitle}}</text>
+    <text [attr.x]="coordinate.yTitlePositionX" [attr.y]="coordinate.yTitlePositionY" [attr.fill]="coordinate.__option__.font.fontColor" [attr.font-size]="coordinate.__option__.font.fontSize">{{coordinate.__option__.title.yTitle}}</text>
+    <line *ngFor="let line of graph.lines" [attr.x1]="line ? line.pointS.x : -100" [attr.y1]="line ? line.pointS.y : -100" [attr.x2]="line ? line.pointE.x : -100" [attr.y2]="line ? line.pointE.y : -100" [attr.stroke]="graphOption.color" [attr.stroke-width]="graphOption.width"></line>
+    <line [attr.x1]='tempLine.pointS.x' [attr.y1]="tempLine.pointS.y" [attr.x2]="tempLine.pointE.x" [attr.y2]="tempLine.pointE.y" [attr.stroke]="graphOption.color" [attr.stroke-width]="graphOption.width"></line>
   </svg>
 <div>

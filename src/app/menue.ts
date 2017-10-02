@@ -1,43 +1,53 @@
 export class BUTTON {
     index:number;
+    name:string;
     title:string;
     src:string;
     selected:boolean; 
-    clicked:boolean;
+    clicted:boolean;
     parent;
-    constructor(index:number,title:string, src:string,parent) {
+    constructor(index:number,name:string,title:string, src:string,parent) {
         this.index = index;
+        this.name = name;
         this.title = title;
         this.src = src;
         this.selected = false;
-        this.clicked = false;
+        this.clicted = false;
         this.parent = parent;
     }
 
     hover(): void {
-        if(!this.clicked){
+        if(!this.clicted){
             this.selected = true 
         }
     }
 
     out(): void{
-        if(!this.clicked){
+        if(!this.clicted){
             this.selected = false;
         }
     }
 
     click(): void{
-        this.clicked = ! this.clicked;
-        this.selected = this.clicked;
+        if(this.clicted){
+            this.clicted = false;
+            this.parent.which = '';
+        }else{
+            this.parent.children.forEach((element,index) => {
+                this.parent.children[index].clicted = false;
+                this.parent.children[index].selected = false;
+            });
+            this.clicted = true;
+            this.selected = true;
+            this.parent.which = this.name;
+        }
     }
 }
-let parent = {
-    clicked: false,
-    children: []
+export const MENUE = {
+    children:[],
+    which:''
 }
-export let MENUE: BUTTON[] = [];
-parent.children = MENUE;
-MENUE = [
-    new BUTTON(0,'create line','/assets/line.png',parent),
-    new BUTTON(1,'create load','/assets/force.png',parent)
+MENUE.children = [
+    new BUTTON(0,'createLine','create line','/assets/line.png',MENUE),
+    new BUTTON(1,'createLoad','create load','/assets/force.png',MENUE)
 ]

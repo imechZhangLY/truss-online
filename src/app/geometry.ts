@@ -5,11 +5,15 @@ export class POINT {
     constructor(x,y) {
         this.x = x;
         this.y = y;
-    }
+    };
 
     static add(point1:POINT,point2:POINT):POINT {
         return new POINT(point1.x + point2.x,point1.y + point2.y);
-    }
+    };
+
+    static distanceBetweenTwoPoints(point1:POINT,point2:POINT):number {
+        return Math.sqrt((point1.x - point2.x)**2 + (point1.y - point2.y)**2);
+    };
 }
 
 export class LINE {
@@ -17,12 +21,12 @@ export class LINE {
     pointE:POINT;
 
     constructor(point1:POINT,point2:POINT){
-        this.pointS = new POINT(point1.x,point2.y)
+        this.pointS = new POINT(point1.x,point1.y)
         this.pointE = new POINT(point2.x,point2.y)
     }
 
     get length(): number{
-        return Math.sqrt((this.pointE.x - this.pointS.x)**2 + (this.pointE.y - this.pointS.y)**2);
+        return POINT.distanceBetweenTwoPoints(this.pointE,this.pointS);
     }
 
     get cosTheta(): number{

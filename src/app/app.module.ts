@@ -6,12 +6,14 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { MenueComponent } from './menue/menue.component';
 import { PaintComponent } from './paint/paint.component';
+import { TreeComponent } from './tree/tree.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MenueComponent,
-    PaintComponent
+    PaintComponent,
+    TreeComponent
   ],
   imports: [
     BrowserModule,
@@ -19,8 +21,11 @@ import { PaintComponent } from './paint/paint.component';
     HttpModule
   ],
   providers: [],
-  bootstrap: [AppComponent,
-              MenueComponent,
-            PaintComponent]
+  bootstrap: [
+    AppComponent,
+    MenueComponent,
+    PaintComponent,
+    TreeComponent
+  ]
 })
 export class AppModule { }

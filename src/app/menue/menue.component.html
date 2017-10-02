@@ -1,6 +1,10 @@
 <div class="menue">
     Menu:
-    <div class="menue-button" [class.select]="button.selected" *ngFor="let button of menue" (mouseover)="button.hover()" (mouseleave)="button.out()" (click)="button.click()">
+    <div class="menue-button" [class.selected]="button.selected" *ngFor="let button of menue.children" (mouseover)="button.hover()" (mouseleave)="button.out()" (click)="button.click()">
         <img class="button" [title]="button.title" [src]="button.src">
+    </div>
+    <div class="tip">
+        <label>x:</label><span class="position">{{currentPoint.x}}</span>
+        <label>y:</label><span class="position">{{currentPoint.y}}</span>
     </div>
 </div>
